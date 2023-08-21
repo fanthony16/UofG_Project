@@ -1,8 +1,12 @@
+import sys
 import os
 import pandas as pd
 from src import logger
+from src import exception
 from dataclasses import dataclass
 from sklearn.model_selection import train_test_split
+from src.components.data_transformation import DataTransformation
+from src.components.model_trainer import ModelTrainer
 
 @dataclass
 class DataIngestionConfig:
@@ -36,14 +40,22 @@ class DataIngestion:
             )
             
         
-        except exception as e :
-            logger.logging.info("An Error Occur")
+        except Exception as e :
+            raise exception.CustomException(e,sys)
         
 if __name__ == "__main__" :
     
     try:
+        
         obj = DataIngestion()
-        obj.initiate_data_ingestion()
-        logger.logging.info("Testing Logging")
+        train_data, test_data = obj.initiate_data_ingestion()
+        data_transformation = DataTransformation()
+        train_arr, test_arr,_= data_transformation.initiate_data_transformation(train_data,test_data)
+        
+        model_trainer = ModelTrainer()
+        print(model_trainer.initiate_model_trainer(train_arr, test_arr))
+        
+        logger.logging.info("Data Transformation happened successfully")
+        
     except Exception as e :
-        logger.logging.info("Testing Logging")
+        raise exception.CustomException(e,sys)
