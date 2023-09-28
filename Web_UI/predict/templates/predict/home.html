@@ -1,0 +1,74 @@
+{% extends 'blog/base.html' %}
+{% block content%}
+
+<div class="alert alert-info" role="alert" align="center">
+  <h5>History of {{ page_obj.paginator.count }} Patient(s) Predictions</h5>
+</div>
+    
+
+      <table class="table table-stripped table-hover">
+          <tr>
+            <th></th>
+            <th>Gender</th>
+            <th>Age</th>
+            <th>Hypertension</th>
+            <th>Heart Disease</th>
+            <th>Ever Married</th>
+            <th>Work Type</th>
+            <th>Residence Type</th>
+            <th>Avg Glucose Level</th>
+            <th>Bmi</th>
+            <th>Smoking Status</th>
+            <th>Stroke Prob</th>
+          </tr>
+          {% for prediction  in predictions  %}
+              <tr>
+                <td><a class="btn btn-outline-info mb-4" href="#">Select</a></td>
+                <td>{{ prediction.gender }}</td>
+                <td>{{ prediction.age }}</td>
+                <td>{{ prediction.hypertension }}</td>
+                <td>{{ prediction.heart_disease }}</td>
+                <td>{{ prediction.ever_married }}</td>
+                <td>{{ prediction.work_type }}</td>
+                <td>{{ prediction.Residence_type }}</td>
+                <td>{{ prediction.avg_glucose_level }}</td>
+                <td>{{ prediction.bmi }}</td>
+                <td>{{ prediction.smoking_status }}</td>
+                <td>{{ prediction.stroke }}</td>
+              </tr>
+          {% endfor %}
+        
+      </table>
+      {% if is_paginated  %}
+      
+          {% if page_obj.has_previous %}
+              
+              <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+              <a class="btn btn-outline-info mb-4" href="?page={{page_obj.previous_page_number}}">Previous</a>
+      
+          {% endif %}
+
+          {% for num in page_obj.paginator.page_range %}
+              {% if page_obj.number == num %}
+                  <a class="btn btn-info mb-4" href="?page={{num}}">{{num}}</a>
+              {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                  <a class="btn btn-outline mb-4" href="?page={{num}}">{{num}}</a>
+              {% endif %}
+          {% endfor %}
+
+
+          {% if page_obj.has_next %}
+              <a class="btn btn-outline-info mb-4" href="?page={{page_obj.next_page_number}}">Next</a>
+              <a class="btn btn-outline-info mb-4" href="?page={{page_obj.paginator.num_pages}}">Last</a>
+          {% endif %}
+
+      {% endif %}
+
+      <div class="form-group">
+        <a class="btn btn-outline-info" href="{% url "predict-new" %}">Make New Prediction</a>
+    </div>
+    
+
+{%endblock content%}
+        
+ 
